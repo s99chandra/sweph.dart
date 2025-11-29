@@ -1,3 +1,69 @@
+// // The Android Gradle Plugin builds the native code with the Android NDK.
+
+// group 'org.duckdns.vm75.sweph'
+// version '3.2.0+2.10.3'
+
+// buildscript {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+
+//     dependencies {
+//         // The Android Gradle Plugin knows how to build native code with the NDK.
+//         classpath 'com.android.tools.build:gradle:7.1.2'
+//     }
+// }
+
+// rootProject.allprojects {
+//     repositories {
+//         google()
+//         mavenCentral()
+//     }
+// }
+
+// apply plugin: 'com.android.library'
+
+// android {
+//     // Namespace for Gradle version >= 8.0.0
+//     if (project.android.hasProperty("namespace")) {
+//         namespace("org.duckdns.vm75.sweph")
+//     }
+
+//     // Bumping the plugin compileSdkVersion requires all clients of this plugin
+//     // to bump the version in their app.
+//     compileSdkVersion 31
+
+//     // Bumping the plugin ndkVersion requires all clients of this plugin to bump
+//     // the version in their app and to download a newer version of the NDK.
+//     ndkVersion "21.1.6352462"
+
+//     // Invoke the shared CMake build with the Android Gradle Plugin.
+//     externalNativeBuild {
+//         cmake {
+//             path "../native/CMakeLists.txt"
+
+//             // The default CMake version for the Android Gradle Plugin is 3.10.2.
+//             // https://developer.android.com/studio/projects/install-ndk#vanilla_cmake
+//             //
+//             // The Flutter tooling requires that developers have CMake 3.10 or later
+//             // installed. You should not increase this version, as doing so will cause
+//             // the plugin to fail to compile for some customers of the plugin.
+//             // version "3.10.2"
+//         }
+//     }
+
+//     compileOptions {
+//         sourceCompatibility JavaVersion.VERSION_1_8
+//         targetCompatibility JavaVersion.VERSION_1_8
+//     }
+
+//     defaultConfig {
+//         minSdkVersion 16
+//     }
+// }
+
+
 // The Android Gradle Plugin builds the native code with the Android NDK.
 
 group 'org.duckdns.vm75.sweph'
@@ -10,8 +76,11 @@ buildscript {
     }
 
     dependencies {
-        // The Android Gradle Plugin knows how to build native code with the NDK.
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        // **CRITICAL UPDATE: Latest stable AGP (as of late 2025)**
+        // Check for the absolute latest stable version on the Android Developers site
+        classpath 'com.android.tools.build:gradle:8.7.3'
+        // If your project uses Kotlin, you'd also need the Kotlin plugin here:
+        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" 
     }
 }
 
@@ -25,40 +94,42 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    // Namespace for Gradle version >= 8.0.0
-    if (project.android.hasProperty("namespace")) {
-        namespace("org.duckdns.vm75.sweph")
-    }
+    // Namespace is required for AGP 8.0.0+
+    namespace 'org.duckdns.vm75.sweph'
 
-    // Bumping the plugin compileSdkVersion requires all clients of this plugin
-    // to bump the version in their app.
-    compileSdkVersion 31
+    // **UPDATE: Target a recent compileSdkVersion (e.g., 34 or 35)**
+    // Android 12 (API 31) support is often better with AGP 7.2.0+ and higher compileSdk.
+    // Targeting 34 is generally recommended for current Flutter/Android Studio.
+    compileSdkVersion 36 
 
-    // Bumping the plugin ndkVersion requires all clients of this plugin to bump
-    // the version in their app and to download a newer version of the NDK.
-    ndkVersion "21.1.6352462"
+    // **UPDATE: Use a recommended NDK version**
+    // AGP 8.x is often tested with newer NDKs. NDK 21 is very old.
+    // Using a recent NDK, like 25.2.9519653, is generally safer for modern native builds.
+    ndkVersion "29.0.13846066"
 
     // Invoke the shared CMake build with the Android Gradle Plugin.
     externalNativeBuild {
         cmake {
             path "../native/CMakeLists.txt"
 
-            // The default CMake version for the Android Gradle Plugin is 3.10.2.
-            // https://developer.android.com/studio/projects/install-ndk#vanilla_cmake
-            //
-            // The Flutter tooling requires that developers have CMake 3.10 or later
-            // installed. You should not increase this version, as doing so will cause
-            // the plugin to fail to compile for some customers of the plugin.
-            // version "3.10.2"
+            // Keep the default CMake version if possible, or specify a widely supported one.
+            // Modern AGP usually uses a newer version internally, but this setting 
+            // is for the user's CMake installation requirement. Leaving it commented 
+            // defaults to the AGP's built-in version, which is often 3.18 or later for AGP 8.x.
+            // version "3.22.1" 
         }
     }
 
     compileOptions {
+        // Modern Android projects often use Java 11 or higher
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
-        minSdkVersion 16
+        // Keep the minimum SDK version low for compatibility (minSdkVersion 16 is fine)
+        minSdkVersion 24
+        // **Recommended: Add targetSdkVersion, which should match compileSdkVersion**
+        targetSdkVersion 36
     }
 }
